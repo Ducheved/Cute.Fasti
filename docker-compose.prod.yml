@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT_API_LOCAL}:${PORT_API}"
+    environment:
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - REDIS_USER=${REDIS_USER}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PREFIX=${REDIS_PREFIX}
+      - ADDRESS=${ADDRESS}
+      - PORT=${PORT_API}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+
+  frnt:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+    ports:
+      - "${PORT_FRNT_LOCAL}:80"
+    depends_on:
+      - api

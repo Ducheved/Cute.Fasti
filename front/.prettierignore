@@ -128,15 +128,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# vscde
-.vscode
-
-# docker-compose test
-docker-compose.yml
-
-# local env
-.env
-api/.env
-front/.env
-
+*.svg
+*.css
