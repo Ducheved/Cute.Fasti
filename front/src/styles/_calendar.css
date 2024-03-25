@@ -1,0 +1,92 @@
+.calendar {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--size-3);
+  width: 100%;
+  max-width: 300px;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-2);
+  padding: var(--size-4);
+}
+
+.calendar-header {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prev-month,
+.next-month {
+  background-color: var(--brand);
+  border: none;
+  font-size: var(--font-size-1);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+button[data-datatype="month"] {
+  background-color: var(--brand) !important;
+}
+
+.month-year {
+  font-size: var(--font-size-1);
+  font-weight: bold;
+  color: var(--text-1);
+}
+
+.calendar-grid {
+  display: grid;
+  /* grid-template-columns: repeat(7, 1fr); */
+  gap: var(--size-2);
+}
+
+.day-names {
+  display: grid;
+  grid-auto-flow: column;
+  gap: var(--size-2);
+  margin-bottom: var(--size-2);
+}
+
+.day-name {
+  text-align: center;
+  font-size: var(--font-size-2);
+  color: var(--text-2);
+}
+
+.day-cells {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--size-1);
+}
+
+.day-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  background-color: var(--surface-1);
+  border-radius: var(--radius-2);
+  font-size: var(--font-size-3);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.day-cell.empty {
+  background-color: transparent;
+  cursor: default;
+}
+
+.day-cell.highlight {
+  background-color: var(--surface-3);
+  color: var(--text-1);
+  z-index: 1;
+}
+
+.day-cell.selected {
+  background-color: var(--brand);
+  color: var(--white);
+  z-index: 2;
+}

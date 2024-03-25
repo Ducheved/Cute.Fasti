@@ -26,7 +26,7 @@ export class ShortenServiceImpl implements ShortenService {
     if (hashLength < 2 || hashLength > 8)
       throw new Error('Hash length must be between 2 and 8');
     if (customPrefix.length > 12) throw new Error('Custom prefix is too long');
-    if (expiration > 262800) throw new Error('Expiration is too long');
+    if (expiration > 15768000) throw new Error('Expiration is too long');
 
     const shortUrls: ShortenResponse = { shortUrls: [] };
     const startTime = process.hrtime.bigint();

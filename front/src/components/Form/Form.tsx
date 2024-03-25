@@ -1,9 +1,10 @@
-import { Component, createSignal, createEffect, Show } from 'solid-js';
+// src/components/Form/Form.tsx
+import { Component, createSignal, Show } from 'solid-js';
 import { validateUrl } from '../../utils/validators';
 import { shortenUrl } from '../../utils/api';
 import FormField from './FormField';
 import ResultComponent from './ResultComponent';
-import { ShortenResponse } from '../../types/types';
+import { ShortenRequest, ShortenResponse } from '../../types/types';
 import { SiCurl } from 'solid-icons/si';
 import { AiOutlineFieldTime } from 'solid-icons/ai';
 import { BiSolidNoEntry } from 'solid-icons/bi';
@@ -12,11 +13,12 @@ import { SiAutoprefixer } from 'solid-icons/si';
 import { BsBorderStyle } from 'solid-icons/bs';
 import { SiFastify } from 'solid-icons/si';
 import { Transition } from 'solid-transition-group';
+import Calendar from '../Calendar/Calendar';
 
 const Form: Component = () => {
   const [url, setUrl] = createSignal('');
   const [command, setCommand] = createSignal('nyart');
-  const [expiration, setExpiration] = createSignal(60);
+  const [expirationDate, setExpirationDate] = createSignal(new Date());
   const [maxClicks, setMaxClicks] = createSignal('');
   const [customPrefix, setCustomPrefix] = createSignal('');
   const [hashLength, setHashLength] = createSignal(4);
@@ -37,11 +39,6 @@ const Form: Component = () => {
       setCopySuccess('Again');
     }
   };
-  createEffect(() => {
-    if (copySuccess() !== '') {
-      setTimeout(() => setCopySuccess(''), 2000);
-    }
-  });
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault();
@@ -53,17 +50,21 @@ const Form: Component = () => {
       setError('Please enter a valid URL');
       return;
     }
+    const expiration = Math.floor((expirationDate().getTime() - new Date().getTime()) / 1000);
+    console.log('Exp: ' + expiration);
+    console.log('GetNew: ' + expirationDate().getTime());
+    console.log('NowDate: ' + new Date());
+    const requestData: ShortenRequest = {
+      urls: [validatedUrl],
+      command: command(),
+      expiration,
+      maxClicks: maxClicks() || '0',
+      customPrefix: customPrefix() || '0',
+      hashLength: hashLength(),
+    };
 
     try {
-      const response = await shortenUrl({
-        urls: [validatedUrl],
-        command: command(),
-        expiration: expiration() * 60,
-        maxClicks: maxClicks() || '0',
-        customPrefix: customPrefix() || '0',
-        hashLength: hashLength(),
-      });
-
+      const response = await shortenUrl(requestData);
       setResponse(response);
     } catch (err) {
       setError('An error occurred while shortening the URL');
@@ -122,19 +123,9 @@ const Form: Component = () => {
           </Transition>
         </div>
         <div class="nyaExpr">
-          <FormField
-            label="Expr"
-            ico={<AiOutlineFieldTime />}
-            type="number"
-            min="1"
-            max="262800"
-            value={expiration().toString()}
-            onChange={(e) => {
-              if (e.currentTarget instanceof HTMLInputElement) {
-                setExpiration(parseInt(e.currentTarget.value));
-              }
-            }}
-          />
+          <FormField label="Expr" ico={<AiOutlineFieldTime />} value="" onChange={() => {}}>
+            <Calendar value={() => expirationDate()} onChange={(date) => setExpirationDate(date)} />
+          </FormField>
         </div>
         <div class="NyaEntrs">
           <FormField

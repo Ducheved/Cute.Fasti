@@ -22,7 +22,11 @@ export function validateShortenRequest(
     return false;
   }
 
-  if (typeof expiration !== 'number' || expiration < 1 || expiration > 262800) {
+  if (
+    typeof expiration !== 'number' ||
+    expiration < 1 ||
+    expiration > 15768000
+  ) {
     return false;
   }
 
